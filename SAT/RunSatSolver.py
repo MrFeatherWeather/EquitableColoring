@@ -39,7 +39,39 @@ def coloring(G:nx.Graph,H:int = None):
 
         return SatParser.varsToColor(result,x)
 
+def coloring_pop(G:nx.Graph,H:int = None):
+    n = G.number_of_nodes()
+    if H is None:
+        H = max(heur.FJK2(G,nx.greedy_color(G,strategy="DSATUR")).keys())+1
+    lowerLimit = 3
+    upperLimit = H
+    print(H)
+    while upperLimit-lowerLimit > 1:
+        print(lowerLimit, upperLimit)
+        middle = lowerLimit+int((upperLimit-lowerLimit)/2)
+        decis.k_colorability_pop(G,middle)
+        run = subprocess.run(['kissat.exe', 'SAT.cnf'], stdout=subprocess.PIPE)
+        result = SatParser.parseSatResult(run.stdout.decode('utf-8'))
+        if result is None:
+            lowerLimit = middle
+        else:
+            upperLimit = middle
+    print(lowerLimit,upperLimit)
+    x = decis.k_colorability_pop(G, upperLimit)
 
+    run = subprocess.run(['kissat.exe', 'SAT.cnf'], stdout=subprocess.PIPE)
+
+    result = SatParser.parseSatResult(run.stdout.decode('utf-8'))
+    if result is not None:
+
+        return SatParser.varsToColor_POP(result,x)
+    else:
+        x = decis.k_colorability_pop(G, lowerLimit)
+        run = subprocess.run(['kissat.exe', 'SAT.cnf'], stdout=subprocess.PIPE)
+
+        result = SatParser.parseSatResult(run.stdout.decode('utf-8'))
+
+        return SatParser.varsToColor_POP(result,x)
 
 def solveFormula(formula:str,n_vars:int,n_clauses:int):
     with open("SAT.cnf", "w") as f:
@@ -52,7 +84,7 @@ def solveFormula(formula:str,n_vars:int,n_clauses:int):
 
 #solveFormula(*decis.card_constraint(list(range(1,7)),2, 6,atmost=False))
 G = prs.readDimacs("../Instances/InstancesA/5-FullIns_3.col")
-col = coloring(G)
+col = coloring_pop(G)
 #print(len(col))
 print(col)
 #result = subprocess.run(['kissat.exe', 'SAT.cnf'], stdout=subprocess.PIPE)

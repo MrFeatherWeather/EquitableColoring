@@ -38,3 +38,22 @@ def varsToColor(vars,x):
             coloring[i].append(v)
             colored.add(v)
     return coloring
+
+def varsToColor_POP(vars,y):
+    coloring = {}
+
+    k = max(y.keys(),key=lambda x: x[1])[1]+1
+    n = max(y.keys(),key=lambda x: x[0])[0]+1
+
+    for v in range(n):
+        if vars[y[v,0]-1]==1:
+            if 0 not in coloring:
+                coloring[0] = []
+            coloring[0].append(v)
+        for i in range(1,k):
+          if vars[y[v,i-1]-1]-vars[y[v,i]-1] == 1:
+                if i not in coloring:
+                    coloring[i] = []
+                coloring[i].append(v)
+
+    return coloring
