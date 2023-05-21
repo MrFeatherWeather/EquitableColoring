@@ -1,0 +1,16 @@
+model parameters nodes edges density heuristic max_clique max_degree upper_bound lower_bound runtime bbnodes simplex_it: instance
+POPHyb strength:True,symm:True,equitConst:addvars 125 736 0.09496774193548387 6 4 24 5.0 5.0 3.0948619842529297 244.0 53557.0 DSJC125.1.col
+POP strength:True,symm:True,equitConst:none 125 736 0.09496774193548387 6 4 24 5.0 5.0 4.963165283203125 1111.0 83908.0 DSJC125.1.col
+ASS symm:False,equitConst:standard 125 736 0.09496774193548387 6 4 24 5.0 5.0 3.3595504760742188 322.0 62361.0 DSJC125.1.col
+POPHyb strength:True,symm:True,equitConst:addvars 561 1628 0.010364145658263305 13 9 100 13.0 13.0 0.4358406066894531 1.0 5705.0 homer.col
+POP strength:True,symm:True,equitConst:none 561 1628 0.010364145658263305 13 9 100 13.0 10.0 100.01328468322754 30824.0 895301.0 homer.col
+ASS symm:False,equitConst:standard 561 1628 0.010364145658263305 13 9 100 13.0 13.0 0.6541099548339844 1.0 7197.0 homer.col
+POPHyb strength:True,symm:True,equitConst:addvars 80 254 0.08037974683544304 10 10 37 10.0 10.0 0.015039443969726562 1.0 180.0 jean.col
+POP strength:True,symm:True,equitConst:none 80 254 0.08037974683544304 10 10 37 10.0 10.0 0.014013290405273438 0.0 0.0 jean.col
+ASS symm:False,equitConst:standard 80 254 0.08037974683544304 10 10 37 10.0 10.0 0.008005142211914062 0.0 0.0 jean.col
+POPHyb strength:True,symm:True,equitConst:addvars 25 160 0.5333333333333333 5 5 17 5.0 5.0 0.002002716064453125 0.0 0.0 queen5_5.col
+POP strength:True,symm:True,equitConst:none 25 160 0.5333333333333333 5 5 17 5.0 5.0 0.0020008087158203125 0.0 0.0 queen5_5.col
+ASS symm:False,equitConst:standard 25 160 0.5333333333333333 5 5 17 5.0 5.0 0.0010356903076171875 0.0 0.0 queen5_5.col
+POPHyb strength:True,symm:True,equitConst:addvars 125 209 0.02696774193548387 5 5 9 5.0 5.0 0.014062881469726562 1.0 272.0 r125.1.col
+POP strength:True,symm:True,equitConst:none 125 209 0.02696774193548387 5 5 9 5.0 5.0 0.008035659790039062 0.0 0.0 r125.1.col
+ASS symm:False,equitConst:standard 125 209 0.02696774193548387 5 5 9 5.0 5.0 0.009035110473632812 1.0 191.0 r125.1.col

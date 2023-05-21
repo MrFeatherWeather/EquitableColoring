@@ -1,0 +1,5 @@
+model parameters nodes edges density heuristic max_clique max_degree upper_bound lower_bound runtime bbnodes simplex_it: instance
+POPHyb q:2,equitConst:addvars,symm:True 30 100 0.22988505747126436 4 3 12 4.0 4.0 0.0050373077392578125 1.0 48.0 1-FullIns_3.col
+POPHyb q:1,equitConst:addvars,symm:True 37 72 0.10810810810810811 4 2 10 4.0 4.0 0.12911415100097656 464.0 4397.0 2-Insertions_3.col
+POPHyb q:2,equitConst:addvars,symm:True 88 146 0.03814002089864159 4 3 5 4.0 4.0 0.16861915588378906 114.0 3798.0 mug88_1.col
+POPHyb q:1,equitConst:addvars,symm:True 11 20 0.36363636363636365 4 2 6 4.0 4.0 0.002002716064453125 1.0 23.0 myciel3.col

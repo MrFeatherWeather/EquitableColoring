@@ -1,0 +1,2 @@
+model instance nodes edges density heuristic max_clique max_degree upper_bound lower_bound runtime bbnodes
+model instance nodes edges density heuristic max_clique max_degree upper_bound lower_bound runtime bbnodesmodel instance nodes edges density heuristic max_clique max_degree upper_bound lower_bound runtime bbnodes

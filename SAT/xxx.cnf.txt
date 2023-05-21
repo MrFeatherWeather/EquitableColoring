@@ -1,0 +1,10 @@
+c CNF/DIMACS file for "<expression>"
+c created: 27-Mar-2023 21:00:35
+c by akBoole 06-Mar-2023
+c command: akBoole "a and b" -d -o xxx.cnf.txt
+c a 1
+c b 2
+c
+p cnf 1 2
+1 0
+-1 0
