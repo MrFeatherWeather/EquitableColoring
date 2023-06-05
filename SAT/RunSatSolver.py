@@ -8,7 +8,7 @@ import DecideColorable2 as decis
 import Scripts.Source.Utility as util
 import Scripts.Source.Preprocessing as pre
 import time
-def coloring(G:nx.Graph,H:int = None):
+def coloring(G:nx.Graph,H:int = None,clq = None):
     n = G.number_of_nodes()
     if H is None:
         H = max(heur.FJK2(G,nx.greedy_color(G,strategy="DSATUR")).keys())+1
@@ -18,7 +18,7 @@ def coloring(G:nx.Graph,H:int = None):
     while upperLimit-lowerLimit > 1:
         print(lowerLimit, upperLimit)
         middle = lowerLimit+int((upperLimit-lowerLimit)/2)
-        decis.k_colorability(G,middle)
+        decis.k_colorability(G,middle,clq)
         run = subprocess.run(['kissat.exe', 'SAT.cnf'], stdout=subprocess.PIPE)
         result = SatParser.parseSatResult(run.stdout.decode('utf-8'))
         if result is None:
@@ -26,7 +26,7 @@ def coloring(G:nx.Graph,H:int = None):
         else:
             upperLimit = middle
     print(lowerLimit,upperLimit)
-    x = decis.k_colorability(G, upperLimit)
+    x = decis.k_colorability(G, upperLimit,clq)
 
     run = subprocess.run(['kissat.exe', 'SAT.cnf'], stdout=subprocess.PIPE)
 
@@ -35,7 +35,7 @@ def coloring(G:nx.Graph,H:int = None):
 
         return SatParser.varsToColor(result,x)
     else:
-        x = decis.k_colorability(G, lowerLimit)
+        x = decis.k_colorability(G, lowerLimit,clq)
         run = subprocess.run(['kissat.exe', 'SAT.cnf'], stdout=subprocess.PIPE)
 
         result = SatParser.parseSatResult(run.stdout.decode('utf-8'))
@@ -156,7 +156,7 @@ def coloring_equit(G:nx.Graph,H:int = None):
     return SatParser.varsToColor_POP(result, x)
 
 
-def SATcoloring(model:decis.ColoringModel,G:nx.Graph, H:int,lb:int,parameters:dict = None, timeout:int = None):
+def SATcoloring(model:decis.ColoringModel,G:nx.Graph, H:int,lb:int,parameters:dict = None, timeout:int = None,clq = None):
     runtime = 0
 
     def solveSatFile():
@@ -219,6 +219,7 @@ def SATcoloring(model:decis.ColoringModel,G:nx.Graph, H:int,lb:int,parameters:di
 
 def runSATModel(model:decis.ColoringModel,G:nx.Graph, H:int,clq:list,parameters:dict = None, timeout:int = None,lb = 0):
     if lb == 0: lb = len(clq)
+    model.setClique(clq)
     col = SATcoloring(model, G,H,lb,parameters=parameters, timeout=timeout)
 
     if model.lb != model.ub:
