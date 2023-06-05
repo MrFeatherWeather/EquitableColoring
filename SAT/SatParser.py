@@ -26,6 +26,7 @@ def varsToColor2(vars, n):
     return coloring
 
 def varsToColor(vars,x):
+
     coloring = {}
     colored = set()
 

@@ -209,7 +209,8 @@ def FJK2(G:nx.Graph,coloring):
 
     return color_groups
 
-
+def UpperBoundFJK2(G:nx.Graph):
+    return max(FJK2(G, nx.greedy_color(G, strategy="DSATUR")).keys())+1
 def colorGraph(color_groups,colored,path): #Visualisiert die Färbung
 
     col = max(color_groups.keys())+1

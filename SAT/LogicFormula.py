@@ -43,4 +43,9 @@ def k_card_const(vars:list, formula:LogicFormula,k:int,atmost:bool):
     B = {(i, g): formula.addVar() for i, g in itertools.product(range(k), range(1, log_ceil + 1))}
     T = {(g, i): formula.addVar() for i, g in itertools.product(range(n), range(k))}
     for i, g, j in itertools.product(range(n), range(k), range(1, log_ceil + 1)):
-        formula.addClause([-T[(g,i),(1 if bit_one(vars[i],j) else -1)* B[g,j]]])
+        formula.addClause([-T[(g,i)],(1 if bit_one(vars[i],j) else -1)* B[g,j]])
+    for i in range(n):
+        formula.addClause([(-1 if atmost else 1)*vars[i]]+[T[g,i] for g in range(k)])
+
+
+
