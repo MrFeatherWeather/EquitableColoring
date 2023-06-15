@@ -1,11 +1,12 @@
 def parseSatResult(result:str)-> list:
-    variables = []
+    variables = [0]
     reachedVars = False
     for line in result.splitlines():
 
         if line[0] == "s" and line.split()[1] == "UNSATISFIABLE":
             return None
         if line[0] == "v":
+            #print(line)
             variables += [0 if lit[0] == "-" else 1 for lit in line.split() if lit != "v" and lit != "0"]
             reachedVars = True
         else:
@@ -33,7 +34,7 @@ def varsToColor(vars,x):
     for v,i in x:
         if v in colored:
             continue
-        if vars[x[v,i]-1] == 1:
+        if vars[x[v,i]] == 1:
             if i not in coloring:
                 coloring[i] = []
             coloring[i].append(v)
@@ -47,12 +48,12 @@ def varsToColor_POP(vars,y):
     n = max(y.keys(),key=lambda x: x[0])[0]+1
 
     for v in range(n):
-        if vars[y[v,0]-1]==1:
+        if vars[y[v,0]]==0:
             if 0 not in coloring:
                 coloring[0] = []
             coloring[0].append(v)
         for i in range(1,k):
-          if vars[y[v,i-1]-1]-vars[y[v,i]-1] == 1:
+          if vars[y[v,i-1]]-vars[y[v,i]] == 1:
                 if i not in coloring:
                     coloring[i] = []
                 coloring[i].append(v)

@@ -7,10 +7,12 @@ class LogicFormula:
 
     def addVar(self)->int:
         self.variables.append(len(self.variables)+1)
+
         return self.variables[-1]
 
     def addVars(self, n)->list:
         self.variables += list(range(len(self.variables)+1,len(self.variables)+n))
+
         return self.variables[-n:]
 
     def addClause(self, literals:list):
@@ -20,6 +22,8 @@ class LogicFormula:
         self.clauses += (clauses)
 
     def parseAsString(self):
+        #print(f"p cnf {len(self.variables)}  {len(self.clauses)}\n" \
+        #       + "\n".join(" ".join(str(lit) for lit in clause)+" 0" for clause in self.clauses))
         return f"p cnf {len(self.variables)}  {len(self.clauses)}\n" \
                + "\n".join(" ".join(str(lit) for lit in clause)+" 0" for clause in self.clauses)
 def bit_one(i,j):

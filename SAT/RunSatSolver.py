@@ -8,6 +8,7 @@ import DecideColorable2 as decis
 import Scripts.Source.Utility as util
 import Scripts.Source.Preprocessing as pre
 import time
+import os
 def coloring(G:nx.Graph,H:int = None,clq = None):
     n = G.number_of_nodes()
     if H is None:
@@ -259,12 +260,24 @@ def solveFormula(formula:str,n_vars:int,n_clauses:int):
     print(result)
 
 #solveFormula(*decis.card_constraint(list(range(1,7)),2, 6,atmost=False))
-G = prs.readDimacs("../Instances/Reserve/school1.col")
-col_mod = decis.POP_SAT()
-H = heur.UpperBoundFJK2(G)
-col = runSATModel(col_mod,G,H,pre.maxCutClique(G,H)[1],timeout=1000)
+result = []
+for file in os.listdir("../Instances/mycielski"):
+
+    if file.endswith(".col"):
+        print(file)
+        G = prs.readDimacs(os.path.join("../Instances/mycielski", file))
+        H = heur.UpperBoundDsatur(G)
+        clq = pre.maxCutClique(G,H)[1]
+        col_mods =[decis.ASS_SAT(), decis.POP_SAT(),decis.POPHyb_SAT()]
+        for col_mod in col_mods:
+            col = runSATModel(col_mod,G,H,clq,timeout=300)
+            res_dict = {"instance":file}
+            res_dict.update(col)
+            result.append(res_dict)
+
+print("\n".join(str(row) for row in result))
 #print(len(col))
-print(col)
+#print(col)
 #if type(col) == dict:
 #    print(util.checkColoringEq(G,col,False))
 #result = subprocess.run(['kissat.exe', 'SAT.cnf'], stdout=subprocess.PIPE)

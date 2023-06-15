@@ -1,28 +1,9 @@
-import math
 import networkx as nx
 import LogicFormula as Logic
-from abc import ABC, abstractmethod
 import SatParser
 import math
 import Preprocessing as preproc
-class ColoringModel(ABC):
-    @abstractmethod
-    def __init__(self):
-        self.type = ""
-        self.lb = -math.inf
-        self.ub = math.inf
-        self.eq = False
-        self.runtime = 0
-        self.clq = None
-    @abstractmethod
-    def k_coloring_formula(self,G: nx.Graph, k: int):
-        pass
-
-    @abstractmethod
-    def coloring_from_vars(self, vars):
-        pass
-    def setClique(self,clq):
-        self.clq = clq
+from BaseColoring import ColoringModel
 
 class ASS_SAT(ColoringModel):
     def __init__(self):
@@ -38,15 +19,23 @@ class ASS_SAT(ColoringModel):
         for v, w in G.edges():
             for i in range(k):
                 Logic.at_most_1_const([x[v, i], x[w, i]], sat_formulation)
+        self.x = x.copy()
+
         if self.clq is not None:
             preproc.precolorClique(self,sat_formulation,self.clq)
+
+
         with open("SAT.cnf", "w") as f:
             f.write(sat_formulation.parseAsString())
 
-        self.x = x.copy()
+
         return x
 
     def coloring_from_vars(self,vars):
+
+        #for v in range(max(self.x.keys(),key=lambda x: x[0])[0]):
+        #    print(v,[vars[self.x[v, i]] for i in range(max(self.x.keys(), key=lambda x: x[1])[1] + 1)])
+        #    print(v, [self.x[v, i] for i in range(max(self.x.keys(), key=lambda x: x[1])[1] + 1)])
         return SatParser.varsToColor(vars,self.x)
 
 
@@ -68,14 +57,18 @@ class POP_SAT(ColoringModel):
             Logic.at_least_1_const([y[v, 0], y[w, 0]], sat_formulation)
             for i in range(1, k):
                 Logic.at_most_1_const([y[v, i - 1], -y[v, i], y[w, i - 1], -y[w, i]], sat_formulation)
+        self.x = y.copy()
         if self.clq is not None:
             preproc.precolorClique(self,sat_formulation,self.clq)
         with open("SAT.cnf", "w") as f:
             f.write(sat_formulation.parseAsString())
-        self.x = y.copy()
+
         return y
 
     def coloring_from_vars(self,vars):
+        #for v in range(max(self.x.keys(),key=lambda x: x[0])[0]):
+        #    print(v,[vars[self.x[v, i]] for i in range(max(self.x.keys(), key=lambda x: x[1])[1] + 1)])
+        #    print(v, [self.x[v, i] for i in range(max(self.x.keys(), key=lambda x: x[1])[1] + 1)])
         return SatParser.varsToColor_POP(vars,self.x)
 class POPHyb_SAT(ColoringModel):
     def __init__(self):
@@ -102,13 +95,16 @@ class POPHyb_SAT(ColoringModel):
         for v, w in G.edges():
             for i in range(k):
                 Logic.at_most_1_const([x[v, i], x[w, i]], sat_formulation)
+
+        self.y = y.copy()
+        self.x = x.copy()
+
         if self.clq is not None:
             preproc.precolorClique(self,sat_formulation,self.clq)
 
         with open("SAT.cnf", "w") as f:
             f.write(sat_formulation.parseAsString())
-        self.y = y.copy()
-        self.x = x.copy()
+
 
         return y,x
 
