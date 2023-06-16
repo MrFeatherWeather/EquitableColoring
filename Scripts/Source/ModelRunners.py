@@ -4,6 +4,8 @@ import Utility
 import ModelConstructors as models
 import Heuristiken as heur
 import Relabeling as relabel
+import ../SAT/RunSatSolver as SAT_Running
+import ../SAT/DecideColorable2 as SAT_Models
 
 def runModel(model:callable,G:nx.Graph, H:int,clq:list,parameters:dict, m_attributes:dict = None) -> dict:
 
@@ -47,6 +49,11 @@ def GraphTester(modelList:list,G:nx.graph,m_attributes = None,parameters:list = 
         "POPHyb":models.createPOPHyb,
         "REP":models.createREP
     }
+    modelMapSAT = {
+        "ASS": SAT_Models.ASS_SAT,
+        "POP": SAT_Models.POP_SAT,
+        "POPHyb": SAT_Models.POPHyb_SAT,
+    }
     results = []
 
     print("Caclulate heuristic solution")
@@ -64,21 +71,25 @@ def GraphTester(modelList:list,G:nx.graph,m_attributes = None,parameters:list = 
     print("Construct Model")
 
     for i,MStr in enumerate(modelList):
-        if "LogFile" in m_attributes:
-            m_attributes["LogFile"] += MStr + ".lg"
-        model_params = {}
-        if "POP" in MStr:
-            model_params = dict(q=cl[-1],strength = True,symm = True, equitConst = 'standard')
-        if MStr == "REP":
-            model_params = dict(symm = True,lowBound = len(clRep))
-            cl = clRep
-            G = GRep
-        if MStr == "ASS":
-            model_params = dict(symm=False,equitConst='standard')
-        if parameters is not None and len(parameters) > i:
-            model_params.update(parameters[i])
+        if MStr[-4:] == "_SAT":
 
-        result = runModel(modelMap[MStr],G,H,cl,model_params,m_attributes)
+            result = SAT_Running.runSATModel(modelMap[MStr][:-4], G, H, cl, timeout = m_attributes["runtime"],lb=len(clRep))
+        else:
+            if "LogFile" in m_attributes:
+                m_attributes["LogFile"] += MStr + ".lg"
+            model_params = {}
+            if MStr == "POP" or MStr == "POPHyb":
+                model_params = dict(q=cl[-1],strength = True,symm = True, equitConst = 'standard')
+            if MStr == "REP":
+                model_params = dict(symm = True,lowBound = len(clRep))
+                cl = clRep
+                G = GRep
+            if MStr == "ASS":
+                model_params = dict(symm=False,equitConst='standard')
+            if parameters is not None and len(parameters) > i:
+                model_params.update(parameters[i])
+
+            result = runModel(modelMap[MStr],G,H,cl,model_params,m_attributes)
 
         results.append(result)
 
